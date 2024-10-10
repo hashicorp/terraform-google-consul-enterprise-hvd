@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 resource "google_compute_firewall" "allow_ssh" {
   name        = "${var.application_prefix}-consul-firewall-ssh-allow"
   description = "Allow SSH ingress to Consul instances from specified CIDR ranges."

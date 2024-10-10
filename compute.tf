@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 locals {
   consul_metadata_template = fileexists("${path.cwd}/templates/${var.consul_metadata_template}") ? "${path.cwd}/templates/${var.consul_metadata_template}" : "${path.module}/templates/${var.consul_metadata_template}"
   consul_user_data_template_vars = {

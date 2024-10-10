@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 resource "google_secret_manager_secret" "management_token" {
   secret_id = "${var.application_prefix}-consul-management-token"
 

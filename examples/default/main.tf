@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 resource "google_storage_bucket" "consul_snapshots" {
   name                        = var.snapshot_bucket_name
   location                    = var.bucket_location

@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 output "loadbalancer_ip" {
   description = "The external ip address of the forwarding rule."
   value       = [google_compute_forwarding_rule.consul_fr[*].ip_address]
