@@ -1,22 +1,22 @@
-# HashiCorp Validated Design (HVD) — Consul Enterprise on Google Compute Engine
+# Consul Enterprise HVD on GCP GCE
 
-This Terraform module deploys an HVD-aligned Consul Enterprise cluster on Google Cloud Platform.
+Terraform module aligned with HashiCorp Validated Designs (HVD) to deploy Consul Enterprise on Google Cloud Platform (GCP) using Compute Engine instances.
 
 ## Prerequisites
 
 This module requires the following resources to already be deployed to a GCP project:
 
-* A VPC with a subnet in a region with 3+ zones
-* GCP Secret Manager secrets with the following contents:
-  * Consul server agent certificate, PEM formatted and base64-encoded
-  * Consul server agent private key, PEM formatted and base64-encoded
-  * Root certificate of the agent's signing authority, PEM formatted and base64-encoded
-  * Consul gossip encryption key
-* (Optional) A GCS bucket for backup snapshot storage
+- A VPC with a subnet in a region with 3+ zones
+- GCP Secret Manager secrets with the following contents:
+  - Consul server agent certificate, PEM formatted and base64-encoded
+  - Consul server agent private key, PEM formatted and base64-encoded
+  - Root certificate of the agent's signing authority, PEM formatted and base64-encoded
+  - Consul gossip encryption key
+- (Optional) A GCS bucket for backup snapshot storage
 
 ## Examples
 
-The [`examples/default` directory](./examples/default/) contains a reference implementation of a root-level module sourcing this repository. The example assumes state output is available from the upstream `terraform-google-prereqs` repository.
+The `examples/default` directory contains a reference implementation of a root-level module sourcing this repository.
 
 ## TLS
 
@@ -24,25 +24,34 @@ Suitable TLS certificates may be generated using the Consul CLI. See the [Consul
 
 The TLS certificate and private key data is expected to be provided via GCP Secret Manager secrets which contain PEM format x.509 certificates, further base64-encoded to eliminate newlines and special characters.
 
-## Adding a Consul License
+## Adding a Consul license
 
 The Consul Enterprise license format is already suitable for storage in GCP Secret Manager and should be added without modification.
 
-## ACL System
+## ACL system
 
 The ACL system will be automatically bootstrapped and configured with sane default policies for anonymous users, agent registration, and the snapshot agent.
 
 ACL tokens are generated for the above policies, as well as the initial management token, and all are stored back to GCP Secret Manager for retrieval by the operator.
 
-## Gossip Encryption
+## Gossip encryption
 
 A Consul gossip encryption key may be generated using the [consul keygen command](https://developer.hashicorp.com/consul/commands/keygen). This command outputs the key material already base64 encoded, and may be added directly to Secret Manager without modification.
 
-## Customizing Options with `tf.autovars.tfvars`
+## Customizing options with tf.autovars.tfvars
 
 Use the `tf.autovars.tfvars` file to customize various options for your Consul deployment. By modifying this file, you can set specific values for the variables used in the module, such as the number of nodes, redundancy settings, and other configurations. Simply edit the `tf.autovars.tfvars` file with your desired settings and run your Terraform commands to apply them.
 
 <!-- BEGIN_TF_DOCS -->
+## Module support
+
+This open source software is maintained by the HashiCorp Technical Field Organization, independently of our enterprise products. While our Support Engineering team provides dedicated support for our enterprise offerings, this open source software is not included.
+
+- For help using this open source software, please engage your account team.
+- To report bugs/issues with this open source software, please open them directly against this code repository using the GitHub issues feature.
+
+Please note that there is no official Service Level Agreement (SLA) for support of this software as a HashiCorp customer. This software falls under the definition of Community Software/Versions in your Agreement. We appreciate your understanding and collaboration in improving our open source projects.
+
 ## Requirements
 
 | Name | Version |
@@ -99,8 +108,8 @@ Use the `tf.autovars.tfvars` file to customize various options for your Consul d
 | <a name="input_cidr_ingress_agent_allow"></a> [cidr\_ingress\_agent\_allow](#input\_cidr\_ingress\_agent\_allow) | CIDR ranges to allow agent traffic (gossip, Consul RPC) inbound to Consul instance(s). Automatically includes the local subnet. | `list(string)` | `[]` | no |
 | <a name="input_cidr_ingress_dns_allow"></a> [cidr\_ingress\_dns\_allow](#input\_cidr\_ingress\_dns\_allow) | CIDR ranges to allow DNS traffic inbound to Consul instance(s). Automatically includes the local subnet. | `list(string)` | `[]` | no |
 | <a name="input_cidr_ingress_grpctls_allow"></a> [cidr\_ingress\_grpctls\_allow](#input\_cidr\_ingress\_grpctls\_allow) | CIDR ranges to allow gRPC-TLS (peering, dataplane) traffic inbound to Consul instance(s). Automatically includes the local subnet. | `list(string)` | `[]` | no |
-| <a name="input_cidr_ingress_https_allow"></a> [cidr\_ingress\_https\_allow](#input\_cidr\_ingress\_https\_allow) | CIDR ranges to allow HTTPS traffic inbound to Consul instance(s). | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
-| <a name="input_cidr_ingress_ssh_allow"></a> [cidr\_ingress\_ssh\_allow](#input\_cidr\_ingress\_ssh\_allow) | CIDR ranges to allow SSH traffic inbound to Consul instance(s). | `list(string)` | <pre>[<br>  "10.0.0.0/16"<br>]</pre> | no |
+| <a name="input_cidr_ingress_https_allow"></a> [cidr\_ingress\_https\_allow](#input\_cidr\_ingress\_https\_allow) | CIDR ranges to allow HTTPS traffic inbound to Consul instance(s). | `list(string)` | <pre>[<br/>  "0.0.0.0/0"<br/>]</pre> | no |
+| <a name="input_cidr_ingress_ssh_allow"></a> [cidr\_ingress\_ssh\_allow](#input\_cidr\_ingress\_ssh\_allow) | CIDR ranges to allow SSH traffic inbound to Consul instance(s). | `list(string)` | <pre>[<br/>  "10.0.0.0/16"<br/>]</pre> | no |
 | <a name="input_common_labels"></a> [common\_labels](#input\_common\_labels) | (optional) Common labels to apply to GCP resources. | `map(string)` | `{}` | no |
 | <a name="input_compute_image_family"></a> [compute\_image\_family](#input\_compute\_image\_family) | (optional) The family name of the image, https://cloud.google.com/compute/docs/images/os-details,defaults to `Ubuntu` | `string` | `"ubuntu-2204-lts"` | no |
 | <a name="input_compute_image_project"></a> [compute\_image\_project](#input\_compute\_image\_project) | (optional) The project name of the image, https://cloud.google.com/compute/docs/images/os-details, defaults to `Ubuntu` | `string` | `"ubuntu-os-cloud"` | no |
@@ -124,7 +133,7 @@ Use the `tf.autovars.tfvars` file to customize various options for your Consul d
 | <a name="input_disk_type"></a> [disk\_type](#input\_disk\_type) | (optional) The disk type to use to create the disk | `string` | `"pd-ssd"` | no |
 | <a name="input_enable_auto_healing"></a> [enable\_auto\_healing](#input\_enable\_auto\_healing) | (optional) Enable auto-healing on the Instance Group | `bool` | `false` | no |
 | <a name="input_enable_iap"></a> [enable\_iap](#input\_enable\_iap) | (Optional bool) Enable https://cloud.google.com/iap/docs/using-tcp-forwarding#console, defaults to `true`. | `bool` | `true` | no |
-| <a name="input_google_service_account_iam_roles"></a> [google\_service\_account\_iam\_roles](#input\_google\_service\_account\_iam\_roles) | (optional) List of project-level IAM roles to give to the Consul service account | `list(string)` | <pre>[<br>  "roles/compute.viewer"<br>]</pre> | no |
+| <a name="input_google_service_account_iam_roles"></a> [google\_service\_account\_iam\_roles](#input\_google\_service\_account\_iam\_roles) | (optional) List of project-level IAM roles to give to the Consul service account | `list(string)` | <pre>[<br/>  "roles/compute.viewer"<br/>]</pre> | no |
 | <a name="input_health_check_interval"></a> [health\_check\_interval](#input\_health\_check\_interval) | (optional) How often, in seconds, to send a health check | `number` | `30` | no |
 | <a name="input_health_timeout"></a> [health\_timeout](#input\_health\_timeout) | (optional) How long, in seconds, to wait before claiming failure | `number` | `15` | no |
 | <a name="input_initial_auto_healing_delay"></a> [initial\_auto\_healing\_delay](#input\_initial\_auto\_healing\_delay) | (optional) The time, in seconds, that the managed instance group waits before it applies autohealing policies | `number` | `1200` | no |
@@ -138,10 +147,10 @@ Use the `tf.autovars.tfvars` file to customize various options for your Consul d
 | <a name="input_packer_image"></a> [packer\_image](#input\_packer\_image) | (optional) The packer image to use | `string` | `null` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | (required) The project ID to host the cluster in (required) | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | (optional) The region to host the cluster in | `string` | `"us-central1"` | no |
-| <a name="input_snapshot_agent"></a> [snapshot\_agent](#input\_snapshot\_agent) | Manage configuration of the Consul snapshot agent | <pre>object({<br>    enabled             = bool<br>    storage_bucket_name = optional(string)<br>    grant_iam_roles     = optional(bool, true)<br>    interval            = optional(string, "30m")<br>    retention           = optional(number, 336) # 1 week @ 30m interval<br>  })</pre> | <pre>{<br>  "enabled": false,<br>  "grant_iam_roles": false<br>}</pre> | no |
+| <a name="input_snapshot_agent"></a> [snapshot\_agent](#input\_snapshot\_agent) | Manage configuration of the Consul snapshot agent | <pre>object({<br/>    enabled             = bool<br/>    storage_bucket_name = optional(string)<br/>    grant_iam_roles     = optional(bool, true)<br/>    interval            = optional(string, "30m")<br/>    retention           = optional(number, 336) # 1 week @ 30m interval<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "grant_iam_roles": false<br/>}</pre> | no |
 | <a name="input_subnetwork"></a> [subnetwork](#input\_subnetwork) | (optional) The subnet in the VPC network to host the cluster in | `string` | `"default"` | no |
 | <a name="input_systemd_dir"></a> [systemd\_dir](#input\_systemd\_dir) | Path to systemd directory for unit files | `string` | `"/etc/systemd/system"` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | (optional) A list containing tags to assign to all resources | `list(string)` | <pre>[<br>  "consul"<br>]</pre> | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | (optional) A list containing tags to assign to all resources | `list(string)` | <pre>[<br/>  "consul"<br/>]</pre> | no |
 
 ## Outputs
 
