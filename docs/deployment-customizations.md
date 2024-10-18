@@ -1,9 +1,13 @@
 
 # Deployment customization
 
+## Seret Manager
+
+the secrets denoted by `_sm_` are required to be placed in the google secret manager prior to their named values being used in the  `tfvars` file.
+
 ## TLS
 
-Certificates are provided at startup via startup script.
+Certificates are provided at startup via startup script. the TLS certs need to be base64 encoded on save to the Google Secret manager
 
 
 ## Customizing options with tf.autovars.tfvars
