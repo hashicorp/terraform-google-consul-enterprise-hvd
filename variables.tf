@@ -12,7 +12,6 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "(optional) The region to host the cluster in"
-  default     = "us-central1"
 }
 
 variable "tags" {
