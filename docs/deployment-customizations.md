@@ -1,7 +1,7 @@
 
 # Deployment customization
 
-## Seret Manager
+## Secret Manager
 
 the secrets denoted by `_sm_` are required to be placed in the google secret manager prior to their named values being used in the  `tfvars` file.
 
