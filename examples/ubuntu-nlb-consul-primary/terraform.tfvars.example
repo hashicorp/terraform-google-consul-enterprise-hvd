@@ -1,15 +1,31 @@
+#------------------------------------------------------------------------------
+# Common
+#------------------------------------------------------------------------------
 project_id                     = "1234567890"
 snapshot_bucket_name           = "your-consul-snapshot-bucket-name"
 bucket_location                = "US"
-force_destroy                  = true  # Set to false in production
 
-snapshot_agent_enabled         = true
-snapshot_agent_grant_iam_roles = true
+#------------------------------------------------------------------------------
+# Consul configuration settings
+#------------------------------------------------------------------------------
+
 
 consul_tls_cert_secret_id      = "projects/1234567890/secrets/consul-tls-cert"
 consul_tls_privkey_secret_id   = "projects/1234567890/secrets/consul-tls-privkey"
 consul_tls_ca_cert_secret_id   = "projects/1234567890/secrets/consul-tls-ca-cert"
 consul_license_secret_id       = "projects/1234567890/secrets/consul-license"
 consul_gossip_key_secret_id    = "projects/1234567890/secrets/consul-gossip-key"
+
+#------------------------------------------------------------------------------
+# Snapshots
+#------------------------------------------------------------------------------
+
+snapshot_agent_enabled         = true
+snapshot_agent_grant_iam_roles = true
+
+#------------------------------------------------------------------------------
+# Networking
+#------------------------------------------------------------------------------
+
 vpc_name                       = "your-vpc-name"
 subnet_name                    = "your-subnet-name"
