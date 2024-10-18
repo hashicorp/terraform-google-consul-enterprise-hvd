@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------------
 # Common
 #------------------------------------------------------------------------------
-project_id                     = "1234567890"
-snapshot_bucket_name           = "<your-consul-snapshot-bucket-name>"
-bucket_location                = "US"
+project_id  = "1234567890"
+region      = "<your-region>"
+tags = "["autojoin"] #first tag is used for auto join if not overridden by `var.auto_join_tag`
 
 #------------------------------------------------------------------------------
 # Consul configuration settings
@@ -24,6 +24,7 @@ snapshot_agent = {
     enabled             = true
     storage_bucket_name = <your-storage-bucket-name>
   }
+
 #------------------------------------------------------------------------------
 # Networking
 #------------------------------------------------------------------------------
