@@ -2,7 +2,7 @@
 # Common
 #------------------------------------------------------------------------------
 project_id                     = "1234567890"
-snapshot_bucket_name           = "your-consul-snapshot-bucket-name"
+snapshot_bucket_name           = "<your-consul-snapshot-bucket-name>"
 bucket_location                = "US"
 
 #------------------------------------------------------------------------------
@@ -10,22 +10,23 @@ bucket_location                = "US"
 #------------------------------------------------------------------------------
 
 
-consul_tls_cert_secret_id      = "projects/1234567890/secrets/consul-tls-cert"
-consul_tls_privkey_secret_id   = "projects/1234567890/secrets/consul-tls-privkey"
-consul_tls_ca_cert_secret_id   = "projects/1234567890/secrets/consul-tls-ca-cert"
-consul_license_secret_id       = "projects/1234567890/secrets/consul-license"
-consul_gossip_key_secret_id    = "projects/1234567890/secrets/consul-gossip-key"
+consul_tls_cert_secret_id      = "<projects/1234567890/secrets/consul-tls-cert>"
+consul_tls_privkey_secret_id   = "<projects/1234567890/secrets/consul-tls-privkey>"
+consul_tls_ca_cert_secret_id   = "<projects/1234567890/secrets/consul-tls-ca-cert>"
+consul_license_secret_id       = "<projects/1234567890/secrets/consul-license>"
+consul_gossip_key_secret_id    = "<projects/1234567890/secrets/consul-gossip-key>"
 
 #------------------------------------------------------------------------------
 # Snapshots
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
-snapshot_agent_enabled         = true
-snapshot_agent_grant_iam_roles = true
-
+snapshot_agent = {
+    enabled             = true
+    storage_bucket_name = <your-storage-bucket-name>
+  }
 #------------------------------------------------------------------------------
 # Networking
 #------------------------------------------------------------------------------
 
-vpc_name                       = "your-vpc-name"
-subnet_name                    = "your-subnet-name"
+network                       = "<your-vpc-name>"
+subnetwork                    = "<your-subnetwork-name>"
