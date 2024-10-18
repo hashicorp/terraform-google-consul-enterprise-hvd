@@ -199,7 +199,7 @@ variable "assign_public_ip" {
 #-----------------------------------------------------------------------------------
 # Compute
 #-----------------------------------------------------------------------------------
-variable "node_count" {
+variable "consul_nodes" {
   type        = number
   description = "(optional) The number of nodes to create in the pool"
   default     = 6

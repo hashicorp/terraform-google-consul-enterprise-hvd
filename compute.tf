@@ -28,7 +28,7 @@ locals {
     consul_datacenter      = var.consul_datacenter
     auto_join_tag_value    = var.auto_join_tag == null ? var.tags[0] : var.auto_join_tag[0]
     auto_join_zone_pattern = "${var.region}-[[:alpha:]]{1}"
-    node_count             = var.node_count
+    consul_nodes           = var.consul_nodes
     snapshot_agent         = var.snapshot_agent
   }
 }
@@ -83,7 +83,7 @@ resource "google_compute_region_instance_group_manager" "consul" {
   #distribution_policy_zones = data.google_compute_zones.available.names
   #this change limits the serversprawl to 3 zones ensuring voters and none voters after first 3 instances
   distribution_policy_zones = slice(data.google_compute_zones.available.names, 0, 3)
-  target_size               = var.node_count
+  target_size               = var.consul_nodes
   region                    = var.region
 
   version {

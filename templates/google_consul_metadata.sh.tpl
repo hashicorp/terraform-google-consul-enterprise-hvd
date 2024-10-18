@@ -152,7 +152,7 @@ function generate_consul_config {
 server           = true
 datacenter       = "${consul_datacenter}"
 client_addr      = "0.0.0.0"
-bootstrap_expect = ${node_count}
+bootstrap_expect = ${consul_nodes}
 license_path     = "$${CONSUL_DIR_LICENSE}/license.hclic"
 data_dir         = "$${CONSUL_DIR_DATA}"
 encrypt          = "$${GOSSIP_KEY}"
@@ -187,7 +187,7 @@ auto_encrypt {
 
 autopilot {
   redundancy_zone_tag = "availability_zone"
-  min_quorum          = ${node_count}
+  min_quorum          = ${consul_nodes}
 }
 
 node_meta {
@@ -306,7 +306,7 @@ service "consul-snapshot" {
 EOF
 
   set -e
-  
+
   log "INFO" "Waiting for the leader to be established"
 
   export CONSUL_HTTP_ADDR="http://localhost:8500"
