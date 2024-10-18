@@ -128,7 +128,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_consul_tls_cert_sm_secret_name"></a> [consul\_tls\_cert\_sm\_secret\_name](#input\_consul\_tls\_cert\_sm\_secret\_name) | Name of Secret Manager containing Consul TLS certificate. | `string` | n/a | yes |
 | <a name="input_consul_tls_privkey_sm_secret_name"></a> [consul\_tls\_privkey\_sm\_secret\_name](#input\_consul\_tls\_privkey\_sm\_secret\_name) | Name of Secret Manager containing Consul TLS private key. | `string` | n/a | yes |
 | <a name="input_consul_user_name"></a> [consul\_user\_name](#input\_consul\_user\_name) | Name of system user to own Consul files and processes | `string` | `"consul"` | no |
-| <a name="input_consul_version"></a> [consul\_version](#input\_consul\_version) | (optional) The version of Consul to use | `string` | `"1.19.1+ent"` | no |
+| <a name="input_consul_install_version"></a> [consul\_version](#input\_consul\_version) | (optional) The version of Consul to use | `string` | `"1.19.1+ent"` | no |
 | <a name="input_disk_size"></a> [disk\_size](#input\_disk\_size) | (optional) The disk size (GB) to use to create the disk | `number` | `100` | no |
 | <a name="input_disk_type"></a> [disk\_type](#input\_disk\_type) | (optional) The disk type to use to create the disk | `string` | `"pd-ssd"` | no |
 | <a name="input_enable_auto_healing"></a> [enable\_auto\_healing](#input\_enable\_auto\_healing) | (optional) Enable auto-healing on the Instance Group | `bool` | `false` | no |

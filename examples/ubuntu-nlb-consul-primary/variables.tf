@@ -64,10 +64,10 @@ variable "consul_fqdn" {
   default     = null
 }
 
-variable "consul_version" {
+variable "consul_install_version" {
   type        = string
   description = "(optional) The version of Consul to use"
-  default     = "1.19.1+ent"
+  default     = "1.19.2+ent"
 }
 
 variable "consul_datacenter" {

@@ -23,7 +23,7 @@ locals {
     consul_tls_ca_bundle_sm_secret_name = var.consul_tls_ca_cert_sm_secret_name,
 
     #Consul settings
-    consul_install_url     = format("https://releases.hashicorp.com/consul/%s/consul_%s_linux_amd64.zip", var.consul_version, var.consul_version),
+    consul_install_url     = format("https://releases.hashicorp.com/consul/%s/consul_%s_linux_amd64.zip", var.consul_install_version, var.consul_install_version),
     consul_fqdn            = var.consul_fqdn == null ? "" : var.consul_fqdn,
     consul_datacenter      = var.consul_datacenter
     auto_join_tag_value    = var.auto_join_tag == null ? var.tags[0] : var.auto_join_tag[0]
@@ -63,7 +63,7 @@ resource "google_compute_instance_template" "consul" {
 
   metadata = var.metadata
 
-  metadata_startup_script = templatefile("${path.module}/templates/google_consul_metadata.sh.tpl", local.consul_user_data_template_vars)
+  metadata_startup_script = templatefile(local.consul_metadata_template, local.consul_user_data_template_vars)
 
   service_account {
     email  = google_service_account.consul_sa.email
