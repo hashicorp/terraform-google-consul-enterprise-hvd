@@ -23,12 +23,12 @@ locals {
     consul_tls_ca_bundle_sm_secret_name = var.consul_tls_ca_cert_sm_secret_name,
 
     #Consul settings
-    consul_install_url     = format("https://releases.hashicorp.com/consul/%s/consul_%s_linux_amd64.zip", var.consul_version, var.consul_version),
+    consul_install_url     = format("https://releases.hashicorp.com/consul/%s/consul_%s_linux_amd64.zip", var.consul_install_version, var.consul_install_version),
     consul_fqdn            = var.consul_fqdn == null ? "" : var.consul_fqdn,
     consul_datacenter      = var.consul_datacenter
     auto_join_tag_value    = var.auto_join_tag == null ? var.tags[0] : var.auto_join_tag[0]
     auto_join_zone_pattern = "${var.region}-[[:alpha:]]{1}"
-    node_count             = var.node_count
+    consul_nodes           = var.consul_nodes
     snapshot_agent         = var.snapshot_agent
   }
 }
@@ -63,7 +63,7 @@ resource "google_compute_instance_template" "consul" {
 
   metadata = var.metadata
 
-  metadata_startup_script = templatefile("${path.module}/templates/google_consul_metadata.sh.tpl", local.consul_user_data_template_vars)
+  metadata_startup_script = templatefile(local.consul_metadata_template, local.consul_user_data_template_vars)
 
   service_account {
     email  = google_service_account.consul_sa.email
@@ -83,7 +83,7 @@ resource "google_compute_region_instance_group_manager" "consul" {
   #distribution_policy_zones = data.google_compute_zones.available.names
   #this change limits the serversprawl to 3 zones ensuring voters and none voters after first 3 instances
   distribution_policy_zones = slice(data.google_compute_zones.available.names, 0, 3)
-  target_size               = var.node_count
+  target_size               = var.consul_nodes
   region                    = var.region
 
   version {

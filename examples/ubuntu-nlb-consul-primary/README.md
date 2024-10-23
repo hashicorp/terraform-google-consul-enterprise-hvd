@@ -1,102 +1,18 @@
-# Consul Enterprise HVD on GCP GCE
-
-Terraform module aligned with HashiCorp Validated Designs (HVD) to deploy Consul Enterprise on Google Cloud Platform (GCP) using Compute Engine instances.
-
-## Prerequisites
-
-This module requires the following resources to already be deployed to a GCP project:
-
-- A VPC with a subnet in a region with 3+ zones
-- GCP Secret Manager secrets with the following contents:
-  - Consul server agent certificate, PEM formatted and base64-encoded
-  - Consul server agent private key, PEM formatted and base64-encoded
-  - Root certificate of the agent's signing authority, PEM formatted and base64-encoded
-  - Consul gossip encryption key
-- (Optional) A GCS bucket for backup snapshot storage
-
-## Examples
-
-The `examples/default` directory contains a reference implementation of a root-level module sourcing this repository.
-
-## TLS
-
-Suitable TLS certificates may be generated using the Consul CLI. See the [Consul TLS](https://developer.hashicorp.com/consul/commands/tls) page in the HashiCorp Developer Portal for more information.
-
-The TLS certificate and private key data is expected to be provided via GCP Secret Manager secrets which contain PEM format x.509 certificates, further base64-encoded to eliminate newlines and special characters.
-
-## Adding a Consul license
-
-The Consul Enterprise license format is already suitable for storage in GCP Secret Manager and should be added without modification.
-
-## ACL system
-
-The ACL system will be automatically bootstrapped and configured with sane default policies for anonymous users, agent registration, and the snapshot agent.
-
-ACL tokens are generated for the above policies, as well as the initial management token, and all are stored back to GCP Secret Manager for retrieval by the operator.
-
-## Gossip encryption
-
-A Consul gossip encryption key may be generated using the [consul keygen command](https://developer.hashicorp.com/consul/commands/keygen). This command outputs the key material already base64 encoded, and may be added directly to Secret Manager without modification.
-
-## Customizing options with tf.autovars.tfvars
-
-Use the `tf.autovars.tfvars` file to customize various options for your Consul deployment. By modifying this file, you can set specific values for the variables used in the module, such as the number of nodes, redundancy settings, and other configurations. Simply edit the `tf.autovars.tfvars` file with your desired settings and run your Terraform commands to apply them.
+# Example Scenario - Ubuntu | Internal Network Load Balancer (NLB) | Primary Consul cluster
 
 
-## Module support
-
-This open source software is maintained by the HashiCorp Technical Field Organization, independently of our enterprise products. While our Support Engineering team provides dedicated support for our enterprise offerings, this open source software is not included.
-
-- For help using this open source software, please engage your account team.
-- To report bugs/issues with this open source software, please open them directly against this code repository using the GitHub issues feature.
-
-Please note that there is no official Service Level Agreement (SLA) for support of this software as a HashiCorp customer. This software falls under the definition of Community Software/Versions in your Agreement. We appreciate your understanding and collaboration in improving our open source projects.
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.33 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | 5.42.0 |
 
-## Providers
+## Modules
 
-| Name | Version |
-|------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | ~> 5.33 |
-
-## Resources
-
-| Name | Type |
-|------|------|
-| [google_compute_firewall.allow_consul_health_checks](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_dns_tcp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_dns_udp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_gossip_tcp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_gossip_udp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_grpc_tls](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_https](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_iap](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_rpc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_firewall.allow_ssh](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
-| [google_compute_forwarding_rule.consul_fr](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_forwarding_rule) | resource |
-| [google_compute_health_check.consul_auto_healing](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_health_check) | resource |
-| [google_compute_instance_template.consul](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_template) | resource |
-| [google_compute_region_backend_service.consul_bs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_backend_service) | resource |
-| [google_compute_region_health_check.consul_hc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_health_check) | resource |
-| [google_compute_region_instance_group_manager.consul](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_instance_group_manager) | resource |
-| [google_project_iam_member.consul_iam](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
-| [google_secret_manager_secret.agent_token](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
-| [google_secret_manager_secret.management_token](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
-| [google_secret_manager_secret.snapshot_token](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
-| [google_secret_manager_secret_iam_member.instance_read](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
-| [google_secret_manager_secret_iam_member.instance_write](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
-| [google_service_account.consul_sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
-| [google_storage_bucket_iam_member.snapshot_storage_rw](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_iam_member) | resource |
-| [google_compute_network.network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network) | data source |
-| [google_compute_subnetwork.subnetwork](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork) | data source |
-| [google_compute_zones.available](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_zones) | data source |
-| [google_netblock_ip_ranges.legacy](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/netblock_ip_ranges) | data source |
-| [google_netblock_ip_ranges.new](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/netblock_ip_ranges) | data source |
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_default"></a> [default](#module\_default) | ../.. | n/a |
 
 ## Inputs
 
@@ -126,7 +42,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_consul_dir_logs"></a> [consul\_dir\_logs](#input\_consul\_dir\_logs) | Path to hold Consul file audit device logs | `string` | `"/var/log/consul"` | no |
 | <a name="input_consul_fqdn"></a> [consul\_fqdn](#input\_consul\_fqdn) | (optional) TLS servername to use when trying to connect to the cluster with HTTPS | `string` | `null` | no |
 | <a name="input_consul_group_name"></a> [consul\_group\_name](#input\_consul\_group\_name) | Name of group to own Consul files and processes | `string` | `"consul"` | no |
-| <a name="input_consul_install_version"></a> [consul\_install\_version](#input\_consul\_install\_version) | (optional) The version of Consul to use | `string` | `"1.19.1+ent"` | no |
+| <a name="input_consul_install_version"></a> [consul\_install\_version](#input\_consul\_install\_version) | (optional) The version of Consul to use | `string` | `"1.19.2+ent"` | no |
 | <a name="input_consul_metadata_template"></a> [consul\_metadata\_template](#input\_consul\_metadata\_template) | (optional) Alternative template file to provide for instance template metadata script. place the file in your local `./templates folder` no path required | `string` | `"google_consul_metadata.sh.tpl"` | no |
 | <a name="input_consul_nodes"></a> [consul\_nodes](#input\_consul\_nodes) | (optional) The number of nodes to create in the pool | `number` | `6` | no |
 | <a name="input_consul_snapshot_dir_config"></a> [consul\_snapshot\_dir\_config](#input\_consul\_snapshot\_dir\_config) | Path to install Consul snapshot agent configuration | `string` | `"/etc/consul-snapshot.d"` | no |
@@ -151,11 +67,4 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_subnetwork"></a> [subnetwork](#input\_subnetwork) | (optional) The subnet in the VPC network to host the cluster in | `string` | `"default"` | no |
 | <a name="input_systemd_dir"></a> [systemd\_dir](#input\_systemd\_dir) | Path to systemd directory for unit files | `string` | `"/etc/systemd/system"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | (optional) A list containing tags to assign to all resources | `list(string)` | <pre>[<br/>  "consul"<br/>]</pre> | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| <a name="output_consul_service_account"></a> [consul\_service\_account](#output\_consul\_service\_account) | Member-format ID of the Consul server service account. |
-| <a name="output_loadbalancer_ip"></a> [loadbalancer\_ip](#output\_loadbalancer\_ip) | The external ip address of the forwarding rule. |
 <!-- END_TF_DOCS -->

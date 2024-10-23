@@ -12,6 +12,7 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "(optional) The region to host the cluster in"
+  default     = "us-central1"
 }
 
 variable "tags" {
@@ -66,7 +67,7 @@ variable "consul_fqdn" {
 variable "consul_install_version" {
   type        = string
   description = "(optional) The version of Consul to use"
-  default     = "1.19.1+ent"
+  default     = "1.19.2+ent"
 }
 
 variable "consul_datacenter" {
