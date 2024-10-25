@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------------
 project_id  = "1234567890"
 region      = "<your-region>"
-tags = "["autojoin"] #first tag is used for auto join if not overridden by `var.auto_join_tag`
+tags = ["autojoin"] #first tag is used for auto join if not overridden by `var.auto_join_tag`
 
 #------------------------------------------------------------------------------
 # Consul configuration settings
