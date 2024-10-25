@@ -9,12 +9,11 @@ tags = "["autojoin"] #first tag is used for auto join if not overridden by `var.
 # Consul configuration settings
 #------------------------------------------------------------------------------
 
-
-consul_tls_cert_secret_id      = "<projects/1234567890/secrets/consul-tls-cert>"
-consul_tls_privkey_secret_id   = "<projects/1234567890/secrets/consul-tls-privkey>"
-consul_tls_ca_cert_secret_id   = "<projects/1234567890/secrets/consul-tls-ca-cert>"
-consul_license_secret_id       = "<projects/1234567890/secrets/consul-license>"
-consul_gossip_key_secret_id    = "<projects/1234567890/secrets/consul-gossip-key>"
+consul_tls_cert_sm_secret_name    = "<consul-tls-cert>"
+consul_tls_privkey_sm_secret_name = "<consul-tls-privkey>"
+consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert>"
+consul_license_sm_secret_name     = "<consul-license>"
+consul_gossip_key_sm_secret_name  = "<consul-gossip-key>"
 
 #------------------------------------------------------------------------------
 # Snapshots
