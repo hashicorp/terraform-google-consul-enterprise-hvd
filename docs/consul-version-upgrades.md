@@ -9,35 +9,29 @@ Consul Enterprise enables the capability of automatically upgrading a cluster of
 
 Review the [Consul operator autopilot](https://developer.hashicorp.com/consul/commands/operator/autopilot) documentation and complete the [Automated Upgrade](https://developer.hashicorp.com/consul/tutorials/datacenter-operations/autopilot-datacenter-operations#upgrade-migrations) tutorial to learn more about automated upgrades.
 
-### Module support
-
+### Module options
 
 The module supports specifying the deployment version.
 
-```pre
-
+```hcl
 variable "consul_install_version" {
   type        = string
   description = "Version of Consul to install, eg. '1.19.0+ent'"
   default     = "1.19.2+ent"
 }
-
 ```
 
 The module supports the auto upgrade features by using [opportunistic or selective updates](https://cloud.google.com/compute/docs/instance-groups/updating-migs#selective_updates)
 
-```pre
-
-  update_policy {
-    type = "OPPORTUNISTIC"
-    #type                         = "PROACTIVE"
-    instance_redistribution_type = "PROACTIVE"
-    minimal_action               = "REPLACE"
-    max_surge_fixed              = length(data.google_compute_zones.available.names)
-    max_unavailable_fixed        = 0
-  }
-
-
+```hcl
+update_policy {
+  type = "OPPORTUNISTIC"
+  #type                         = "PROACTIVE"
+  instance_redistribution_type = "PROACTIVE"
+  minimal_action               = "REPLACE"
+  max_surge_fixed              = length(data.google_compute_zones.available.names)
+  max_unavailable_fixed        = 0
+}
 ```
 
 This means you should (where possible and to prevent data loss) follow the standard operating procedure and ensure a backup and recovery process is in place and used accordingly. See the tutorial on [backup and restore](https://developer.hashicorp.com/consul/tutorials/operate-consul/backup-and-restore ).
