@@ -38,6 +38,10 @@ ACL tokens are generated for the above policies, as well as the initial manageme
 
 A Consul gossip encryption key may be generated using the [consul keygen command](https://developer.hashicorp.com/consul/commands/keygen). This command outputs the key material already base64 encoded, and may be added directly to Secret Manager without modification.
 
+## Docs
+
+Additional documentation for customization and usage can be found in the [docs](./docs/) folder.
+
 ## Module support
 
 This open source software is maintained by the HashiCorp Technical Field Organization, independently of our enterprise products. While our Support Engineering team provides dedicated support for our enterprise offerings, this open source software is not included.
