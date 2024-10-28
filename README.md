@@ -40,7 +40,7 @@ A Consul gossip encryption key may be generated using the [consul keygen command
 
 ## Docs
 
-Additional documentation for customization and usage can be found in the [docs](./docs/) folder.
+Additional documentation for customization and usage can be found in the [docs](https://github.com/hashicorp/terraform-google-consul-enterprise-hvd/blob/0.1.0/docs/) folder.
 
 ## Module support
 
