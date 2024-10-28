@@ -5,11 +5,11 @@ project_id                        = "my-project-id"
 region                            = "us-central1"
 tags                              = ["consul"]
 application_prefix                = "consul"
-consul_license_sm_secret_name     = "projects/my-project/secrets/consul-license"
-consul_tls_cert_sm_secret_name    = "projects/my-project/secrets/consul-tls-cert"
-consul_tls_privkey_sm_secret_name = "projects/my-project/secrets/consul-tls-key"
-consul_tls_ca_cert_sm_secret_name = "projects/my-project/secrets/consul-tls-ca"
-consul_gossip_key_sm_secret_name  = "projects/my-project/secrets/consul-gossip-key"
+consul_license_sm_secret_name     = "<consul-license>"
+consul_tls_cert_sm_secret_name    = "<consul-tls-cert>"
+consul_tls_privkey_sm_secret_name = "<consul-tls-privkey>"
+consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert>"
+consul_gossip_key_sm_secret_name  = "<consul-gossip-key>"
 
 #------------------------------------------------------------------------------
 # Consul Configuration
