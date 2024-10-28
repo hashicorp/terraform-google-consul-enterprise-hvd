@@ -16,7 +16,7 @@ This module requires the following resources to already be deployed to a GCP pro
 
 ## Examples
 
-The `examples/default` directory contains a reference implementation of a root-level module sourcing this repository.
+The `examples/ubuntu-nlb-consul-primary` directory contains a reference implementation of a root-level module sourcing this repository.
 
 ## TLS
 
@@ -38,10 +38,9 @@ ACL tokens are generated for the above policies, as well as the initial manageme
 
 A Consul gossip encryption key may be generated using the [consul keygen command](https://developer.hashicorp.com/consul/commands/keygen). This command outputs the key material already base64 encoded, and may be added directly to Secret Manager without modification.
 
-## Customizing options with tf.autovars.tfvars
+## Docs
 
-Use the `tf.autovars.tfvars` file to customize various options for your Consul deployment. By modifying this file, you can set specific values for the variables used in the module, such as the number of nodes, redundancy settings, and other configurations. Simply edit the `tf.autovars.tfvars` file with your desired settings and run your Terraform commands to apply them.
-
+Additional documentation for customization and usage can be found in the [docs](./docs/) folder.
 
 ## Module support
 
@@ -51,6 +50,7 @@ This open source software is maintained by the HashiCorp Technical Field Organiz
 - To report bugs/issues with this open source software, please open them directly against this code repository using the GitHub issues feature.
 
 Please note that there is no official Service Level Agreement (SLA) for support of this software as a HashiCorp customer. This software falls under the definition of Community Software/Versions in your Agreement. We appreciate your understanding and collaboration in improving our open source projects.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -108,6 +108,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_consul_tls_cert_sm_secret_name"></a> [consul\_tls\_cert\_sm\_secret\_name](#input\_consul\_tls\_cert\_sm\_secret\_name) | Name of Secret Manager containing Consul TLS certificate. | `string` | n/a | yes |
 | <a name="input_consul_tls_privkey_sm_secret_name"></a> [consul\_tls\_privkey\_sm\_secret\_name](#input\_consul\_tls\_privkey\_sm\_secret\_name) | Name of Secret Manager containing Consul TLS private key. | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | (required) The project ID to host the cluster in (required) | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | (optional) The region to host the cluster in | `string` | n/a | yes |
 | <a name="input_application_prefix"></a> [application\_prefix](#input\_application\_prefix) | (optional) The prefix to give to cloud entities | `string` | `"consul"` | no |
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Whether instances should be assigned a public address. If false, they must be provisioned in a subnet with Cloud NAT deployed. | `bool` | `false` | no |
 | <a name="input_auto_join_tag"></a> [auto\_join\_tag](#input\_auto\_join\_tag) | (optional) A list of a tag which will be used by Consul to join other nodes to the cluster. If left blank, the module will use the first entry in `tags` | `list(string)` | `null` | no |
@@ -146,7 +147,6 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_network_project_id"></a> [network\_project\_id](#input\_network\_project\_id) | (optional) The project that the VPC network lives in. Can be left blank if network is in the same project as provider | `string` | `null` | no |
 | <a name="input_network_region"></a> [network\_region](#input\_network\_region) | (optional) The region that the VPC network lives in. Can be left blank if network is in the same region as provider | `string` | `null` | no |
 | <a name="input_packer_image"></a> [packer\_image](#input\_packer\_image) | (optional) The packer image to use | `string` | `null` | no |
-| <a name="input_region"></a> [region](#input\_region) | (optional) The region to host the cluster in | `string` | `"us-central1"` | no |
 | <a name="input_snapshot_agent"></a> [snapshot\_agent](#input\_snapshot\_agent) | Manage configuration of the Consul snapshot agent | <pre>object({<br/>    enabled             = bool<br/>    storage_bucket_name = optional(string)<br/>    grant_iam_roles     = optional(bool, true)<br/>    interval            = optional(string, "30m")<br/>    retention           = optional(number, 336) # 1 week @ 30m interval<br/>  })</pre> | <pre>{<br/>  "enabled": false,<br/>  "grant_iam_roles": false<br/>}</pre> | no |
 | <a name="input_subnetwork"></a> [subnetwork](#input\_subnetwork) | (optional) The subnet in the VPC network to host the cluster in | `string` | `"default"` | no |
 | <a name="input_systemd_dir"></a> [systemd\_dir](#input\_systemd\_dir) | Path to systemd directory for unit files | `string` | `"/etc/systemd/system"` | no |

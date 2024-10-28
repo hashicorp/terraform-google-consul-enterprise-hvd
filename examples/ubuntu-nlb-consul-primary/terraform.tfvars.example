@@ -1,32 +1,63 @@
 #------------------------------------------------------------------------------
-# Common
+# Required and common variables
 #------------------------------------------------------------------------------
-project_id  = "1234567890"
-region      = "<your-region>"
-tags = ["autojoin"] #first tag is used for auto join if not overridden by `var.auto_join_tag`
-
-#------------------------------------------------------------------------------
-# Consul configuration settings
-#------------------------------------------------------------------------------
-
+project_id                        = "my-project-id"
+region                            = "us-central1"
+tags                              = ["consul"]
+application_prefix                = "consul"
+consul_license_sm_secret_name     = "<consul-license>"
 consul_tls_cert_sm_secret_name    = "<consul-tls-cert>"
 consul_tls_privkey_sm_secret_name = "<consul-tls-privkey>"
 consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert>"
-consul_license_sm_secret_name     = "<consul-license>"
 consul_gossip_key_sm_secret_name  = "<consul-gossip-key>"
 
 #------------------------------------------------------------------------------
-# Snapshots
-#-----------------------------------------------------------------------------
+# Consul Configuration
+#------------------------------------------------------------------------------
+consul_fqdn            = "consul.example.com"
+consul_install_version = "1.19.2+ent"
+consul_datacenter      = "dc1"
+auto_join_tag          = ["consul-auto-join"]
 
+#------------------------------------------------------------------------------
+# Compute
+#------------------------------------------------------------------------------
+consul_nodes          = 6
+compute_image_family  = "ubuntu-2204-lts"
+compute_image_project = "ubuntu-os-cloud"
+packer_image          = null # Set if using custom image
+disk_type             = "pd-ssd"
+disk_size             = 100
+machine_type          = "e2-standard-2"
+common_labels = {
+  environment = "prod"
+  team        = "platform"
+}
+enable_auto_healing        = false
+initial_auto_healing_delay = 1200
+enable_iap                 = true
+
+#------------------------------------------------------------------------------
+# IAM
+#------------------------------------------------------------------------------
+google_service_account_iam_roles = [
+  "roles/compute.viewer"
+]
+
+#------------------------------------------------------------------------------
+# Load Balancer
+#------------------------------------------------------------------------------
+load_balancing_scheme = "INTERNAL"
+health_check_interval = 30
+health_timeout        = 15
+
+#------------------------------------------------------------------------------
+# Snapshot Storage
+#------------------------------------------------------------------------------
 snapshot_agent = {
-    enabled             = true
-    storage_bucket_name = <your-storage-bucket-name>
-  }
-
-#------------------------------------------------------------------------------
-# Networking
-#------------------------------------------------------------------------------
-
-network                       = "<your-vpc-name>"
-subnetwork                    = "<your-subnetwork-name>"
+  enabled             = true
+  storage_bucket_name = "my-consul-snapshots-bucket"
+  grant_iam_roles     = true
+  interval            = "30m"
+  retention           = 336
+}

@@ -1,6 +1,5 @@
 # Example Scenario - Ubuntu | Internal Network Load Balancer (NLB) | Primary Consul cluster
 
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
