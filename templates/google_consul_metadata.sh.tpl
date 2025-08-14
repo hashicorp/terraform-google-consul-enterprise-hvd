@@ -12,6 +12,9 @@ CONSUL_DIR_LOGS="${consul_dir_logs}"
 CONSUL_DIR_BIN="${consul_dir_bin}"
 CONSUL_USER="${consul_user_name}"
 CONSUL_GROUP="${consul_group_name}"
+PRODUCT="consul"
+CONSUL_VERSION="${consul_version}"
+VERSION=$CONSUL_VERSION
 REQUIRED_PACKAGES="unzip jq"
 
 function log {
@@ -42,6 +45,29 @@ function determine_os_distro {
   esac
 
   echo "$os_distro"
+}
+
+function detect_architecture {
+  local ARCHITECTURE=""
+  local OS_ARCH_DETECTED=$(uname -m)
+
+  case "$OS_ARCH_DETECTED" in
+    "x86_64"*)
+      ARCHITECTURE="linux_amd64"
+      ;;
+    "aarch64"*)
+      ARCHITECTURE="linux_arm64"
+      ;;
+		"arm"*)
+      ARCHITECTURE="linux_arm"
+			;;
+    *)
+      log "ERROR" "Unsupported architecture detected: '$OS_ARCH_DETECTED'. "
+		  exit_script 1
+  esac
+
+  echo "$ARCHITECTURE"
+
 }
 
 # https://cloud.google.com/sdk/docs/install-sdk#linux
@@ -422,8 +448,12 @@ exit_script() {
 
 main() {
   log "INFO" "Beginning custom_data script."
+
   OS_DISTRO=$(determine_os_distro)
   log "INFO" "Detected OS distro is '$OS_DISTRO'."
+
+  OS_ARCH=$(detect_architecture)
+	log "INFO" "Detected system architecture is '$OS_ARCH'."
 
   log "INFO" "Scraping VM metadata required for Consul configuration"
   scrape_vm_info
