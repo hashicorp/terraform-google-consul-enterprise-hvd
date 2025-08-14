@@ -105,7 +105,7 @@ variable "systemd_dir" {
 variable "consul_dir_bin" {
   type        = string
   description = "Path to install Consul Enterprise binary"
-  default     = "/usr/local/bin"
+  default     = "/usr/bin"
 }
 
 variable "consul_dir_config" {

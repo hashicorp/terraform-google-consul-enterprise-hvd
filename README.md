@@ -122,7 +122,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_compute_image_family"></a> [compute\_image\_family](#input\_compute\_image\_family) | (optional) The family name of the image, https://cloud.google.com/compute/docs/images/os-details,defaults to `Ubuntu` | `string` | `"ubuntu-2204-lts"` | no |
 | <a name="input_compute_image_project"></a> [compute\_image\_project](#input\_compute\_image\_project) | (optional) The project name of the image, https://cloud.google.com/compute/docs/images/os-details, defaults to `Ubuntu` | `string` | `"ubuntu-os-cloud"` | no |
 | <a name="input_consul_datacenter"></a> [consul\_datacenter](#input\_consul\_datacenter) | (optional) Consul datacenter name to configure | `string` | `"dc1"` | no |
-| <a name="input_consul_dir_bin"></a> [consul\_dir\_bin](#input\_consul\_dir\_bin) | Path to install Consul Enterprise binary | `string` | `"/usr/local/bin"` | no |
+| <a name="input_consul_dir_bin"></a> [consul\_dir\_bin](#input\_consul\_dir\_bin) | Path to install Consul Enterprise binary | `string` | `"/usr/bin"` | no |
 | <a name="input_consul_dir_config"></a> [consul\_dir\_config](#input\_consul\_dir\_config) | Path to install Consul Enterprise configuration | `string` | `"/etc/consul.d"` | no |
 | <a name="input_consul_dir_home"></a> [consul\_dir\_home](#input\_consul\_dir\_home) | Path to hold data, plugins and license directories | `string` | `"/opt/consul"` | no |
 | <a name="input_consul_dir_logs"></a> [consul\_dir\_logs](#input\_consul\_dir\_logs) | Path to hold Consul file audit device logs | `string` | `"/var/log/consul"` | no |
