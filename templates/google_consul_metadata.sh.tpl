@@ -171,18 +171,24 @@ function checksum_verify {
 
 }
 
+# install_consul_binary downloads the consul binary and puts it in dedicated bin directory
+function install_consul_binary {
+  local OS_ARCH="$1"
 
-# # install_consul_binary downloads the Consul binary and puts it in dedicated bin directory
-# function install_consul_binary {
-#   log "INFO" "Downloading Consul Enterprise binary"
-#   curl -so $CONSUL_DIR_BIN/consul.zip $CONSUL_INSTALL_URL
+	log "INFO" "Deploying $${PRODUCT} binary to $CONSUL_DIR_BIN unzip and set permissions"
+	sudo unzip "$${PRODUCT}"_"$${CONSUL_VERSION}"_"$${OS_ARCH}".zip  consul -d $CONSUL_DIR_BIN
+	sudo unzip "$${PRODUCT}"_"$${CONSUL_VERSION}"_"$${OS_ARCH}".zip -x consul -d $CONSUL_DIR_LICENSE
+	sudo rm -f "$${PRODUCT}"_"$${CONSUL_VERSION}"_"$${OS_ARCH}".zip
 
-#   log "INFO" "Unzipping Consul Enterprise binary to $CONSUL_DIR_BIN"
-#   unzip $CONSUL_DIR_BIN/consul.zip consul -d $CONSUL_DIR_BIN
-#   # unzip $CONSUL_DIR_BIN/consul.zip -x consul -d $CONSUL_DIR_LICENSE
+	# Set the permissions for the $${PRODUCT} binary
+	sudo chmod 0755 $CONSUL_DIR_BIN/consul
+	sudo chown $CONSUL_USER:$CONSUL_GROUP $CONSUL_DIR_BIN/consul
 
-#   rm $CONSUL_DIR_BIN/consul.zip
-# }
+	# Create a symlink to the $${PRODUCT} binary in /usr/local/bin
+	sudo ln -sf $CONSUL_DIR_BIN/consul /usr/local/bin/consul
+
+	log "INFO" "$${PRODUCT} binary installed successfully at $CONSUL_DIR_BIN/consul"
+}
 
 function fetch_tls_certificates {
   log "INFO" "Retrieving TLS certificate '${consul_tls_cert_sm_secret_name}' from Secret Manager."
@@ -513,8 +519,9 @@ main() {
   directory_create
 
 	checksum_verify $OS_ARCH
-	log "INFO" "Checksum verification completed for Vault binary."
+	log "INFO" "Checksum verification completed for Consul binary."
 
+  install_consul_binary $OS_ARCH
 
   log "INFO" "Retrieving Consul license file from Secret Manager"
   fetch_consul_license
