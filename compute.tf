@@ -23,6 +23,7 @@ locals {
     consul_tls_ca_bundle_sm_secret_name = var.consul_tls_ca_cert_sm_secret_name,
 
     #Consul settings
+    consul_version = var.consul_install_version,
     #consul_install_url     = format("https://releases.hashicorp.com/consul/%s/consul_%s_linux_amd64.zip", var.consul_install_version, var.consul_install_version),
     consul_fqdn            = var.consul_fqdn == null ? "" : var.consul_fqdn,
     consul_datacenter      = var.consul_datacenter
