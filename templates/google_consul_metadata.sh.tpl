@@ -12,7 +12,6 @@ CONSUL_DIR_LOGS="${consul_dir_logs}"
 CONSUL_DIR_BIN="${consul_dir_bin}"
 CONSUL_USER="${consul_user_name}"
 CONSUL_GROUP="${consul_group_name}"
-CONSUL_INSTALL_URL="${consul_install_url}"
 REQUIRED_PACKAGES="unzip jq"
 
 function log {
@@ -105,17 +104,17 @@ function directory_create {
   done
 }
 
-# install_consul_binary downloads the Consul binary and puts it in dedicated bin directory
-function install_consul_binary {
-  log "INFO" "Downloading Consul Enterprise binary"
-  curl -so $CONSUL_DIR_BIN/consul.zip $CONSUL_INSTALL_URL
+# # install_consul_binary downloads the Consul binary and puts it in dedicated bin directory
+# function install_consul_binary {
+#   log "INFO" "Downloading Consul Enterprise binary"
+#   curl -so $CONSUL_DIR_BIN/consul.zip $CONSUL_INSTALL_URL
 
-  log "INFO" "Unzipping Consul Enterprise binary to $CONSUL_DIR_BIN"
-  unzip $CONSUL_DIR_BIN/consul.zip consul -d $CONSUL_DIR_BIN
-  # unzip $CONSUL_DIR_BIN/consul.zip -x consul -d $CONSUL_DIR_LICENSE
+#   log "INFO" "Unzipping Consul Enterprise binary to $CONSUL_DIR_BIN"
+#   unzip $CONSUL_DIR_BIN/consul.zip consul -d $CONSUL_DIR_BIN
+#   # unzip $CONSUL_DIR_BIN/consul.zip -x consul -d $CONSUL_DIR_LICENSE
 
-  rm $CONSUL_DIR_BIN/consul.zip
-}
+#   rm $CONSUL_DIR_BIN/consul.zip
+# }
 
 function fetch_tls_certificates {
   log "INFO" "Retrieving TLS certificate '${consul_tls_cert_sm_secret_name}' from Secret Manager."
