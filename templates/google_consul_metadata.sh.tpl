@@ -42,6 +42,7 @@ function determine_os_distro {
     *)
       log "ERROR" "'$os_distro_name' is not a supported Linux OS distro."
       exit_script 1
+			;;
   esac
 
   echo "$os_distro"
@@ -64,6 +65,7 @@ function detect_architecture {
     *)
       log "ERROR" "Unsupported architecture detected: '$OS_ARCH_DETECTED'. "
 		  exit_script 1
+			;;
   esac
 
   echo "$ARCHITECTURE"
@@ -484,7 +486,7 @@ EOF
 }
 %{ endif ~}
 
-exit_script() {
+function exit_script {
   if [[ "$1" == 0 ]]; then
     log "INFO" "Consul custom_data script finished successfully!"
   else
