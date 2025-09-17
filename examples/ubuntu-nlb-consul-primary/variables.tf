@@ -210,7 +210,7 @@ variable "consul_metadata_template" {
   default     = "google_consul_metadata.sh.tpl"
   validation {
     condition     = can(fileexists("${path.cwd}/templates/${var.consul_metadata_template}") || fileexists("${path.module}/templates/${var.consul_metadata_template}"))
-    error_message = "File `${path.cwd}templates/${var.consul_metadata_template}` or `${path.module}/templates/${var.consul_metadata_template} not found or not readable"
+    error_message = "File `${path.cwd}/templates/${var.consul_metadata_template}` or `${path.module}/templates/${var.consul_metadata_template} not found or not readable"
   }
 }
 
