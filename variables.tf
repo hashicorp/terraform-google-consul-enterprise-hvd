@@ -66,7 +66,7 @@ variable "consul_fqdn" {
 variable "consul_install_version" {
   type        = string
   description = "(optional) The version of Consul to use"
-  default     = "1.19.1+ent"
+  default     = "1.21.0+ent"
 }
 
 variable "consul_datacenter" {
@@ -105,7 +105,7 @@ variable "systemd_dir" {
 variable "consul_dir_bin" {
   type        = string
   description = "Path to install Consul Enterprise binary"
-  default     = "/usr/local/bin"
+  default     = "/usr/bin"
 }
 
 variable "consul_dir_config" {
@@ -209,8 +209,8 @@ variable "consul_metadata_template" {
   description = "(optional) Alternative template file to provide for instance template metadata script. place the file in your local `./templates folder` no path required"
   default     = "google_consul_metadata.sh.tpl"
   validation {
-    condition     = can(fileexists("../../templates/${var.consul_metadata_template}") || fileexists("./templates/${var.consul_metadata_template}"))
-    error_message = "File `../../templates/${var.consul_metadata_template}` or `./templates/${var.consul_metadata_template} not found or not readable"
+    condition     = can(fileexists("${path.cwd}/templates/${var.consul_metadata_template}") || fileexists("${path.module}/templates/${var.consul_metadata_template}"))
+    error_message = "File `${path.cwd}/templates/${var.consul_metadata_template}` or `${path.module}/templates/${var.consul_metadata_template} not found or not readable"
   }
 }
 

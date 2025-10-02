@@ -56,6 +56,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.33 |
 
 ## Providers
@@ -121,13 +122,13 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_compute_image_family"></a> [compute\_image\_family](#input\_compute\_image\_family) | (optional) The family name of the image, https://cloud.google.com/compute/docs/images/os-details,defaults to `Ubuntu` | `string` | `"ubuntu-2204-lts"` | no |
 | <a name="input_compute_image_project"></a> [compute\_image\_project](#input\_compute\_image\_project) | (optional) The project name of the image, https://cloud.google.com/compute/docs/images/os-details, defaults to `Ubuntu` | `string` | `"ubuntu-os-cloud"` | no |
 | <a name="input_consul_datacenter"></a> [consul\_datacenter](#input\_consul\_datacenter) | (optional) Consul datacenter name to configure | `string` | `"dc1"` | no |
-| <a name="input_consul_dir_bin"></a> [consul\_dir\_bin](#input\_consul\_dir\_bin) | Path to install Consul Enterprise binary | `string` | `"/usr/local/bin"` | no |
+| <a name="input_consul_dir_bin"></a> [consul\_dir\_bin](#input\_consul\_dir\_bin) | Path to install Consul Enterprise binary | `string` | `"/usr/bin"` | no |
 | <a name="input_consul_dir_config"></a> [consul\_dir\_config](#input\_consul\_dir\_config) | Path to install Consul Enterprise configuration | `string` | `"/etc/consul.d"` | no |
 | <a name="input_consul_dir_home"></a> [consul\_dir\_home](#input\_consul\_dir\_home) | Path to hold data, plugins and license directories | `string` | `"/opt/consul"` | no |
 | <a name="input_consul_dir_logs"></a> [consul\_dir\_logs](#input\_consul\_dir\_logs) | Path to hold Consul file audit device logs | `string` | `"/var/log/consul"` | no |
 | <a name="input_consul_fqdn"></a> [consul\_fqdn](#input\_consul\_fqdn) | (optional) TLS servername to use when trying to connect to the cluster with HTTPS | `string` | `null` | no |
 | <a name="input_consul_group_name"></a> [consul\_group\_name](#input\_consul\_group\_name) | Name of group to own Consul files and processes | `string` | `"consul"` | no |
-| <a name="input_consul_install_version"></a> [consul\_install\_version](#input\_consul\_install\_version) | (optional) The version of Consul to use | `string` | `"1.19.1+ent"` | no |
+| <a name="input_consul_install_version"></a> [consul\_install\_version](#input\_consul\_install\_version) | (optional) The version of Consul to use | `string` | `"1.21.0+ent"` | no |
 | <a name="input_consul_metadata_template"></a> [consul\_metadata\_template](#input\_consul\_metadata\_template) | (optional) Alternative template file to provide for instance template metadata script. place the file in your local `./templates folder` no path required | `string` | `"google_consul_metadata.sh.tpl"` | no |
 | <a name="input_consul_nodes"></a> [consul\_nodes](#input\_consul\_nodes) | (optional) The number of nodes to create in the pool | `number` | `6` | no |
 | <a name="input_consul_snapshot_dir_config"></a> [consul\_snapshot\_dir\_config](#input\_consul\_snapshot\_dir\_config) | Path to install Consul snapshot agent configuration | `string` | `"/etc/consul-snapshot.d"` | no |

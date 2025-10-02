@@ -13,6 +13,6 @@ terraform {
 provider "google" {
   # Configuration options
   project = "1234567890"
-  region  = "us-central1"
+  region  = var.region
 }
 

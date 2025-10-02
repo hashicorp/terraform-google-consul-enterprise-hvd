@@ -12,7 +12,9 @@ CONSUL_DIR_LOGS="${consul_dir_logs}"
 CONSUL_DIR_BIN="${consul_dir_bin}"
 CONSUL_USER="${consul_user_name}"
 CONSUL_GROUP="${consul_group_name}"
-CONSUL_INSTALL_URL="${consul_install_url}"
+PRODUCT="consul"
+CONSUL_VERSION="${consul_version}"
+VERSION=$CONSUL_VERSION
 REQUIRED_PACKAGES="unzip jq"
 
 function log {
@@ -40,9 +42,34 @@ function determine_os_distro {
     *)
       log "ERROR" "'$os_distro_name' is not a supported Linux OS distro."
       exit_script 1
+			;;
   esac
 
   echo "$os_distro"
+}
+
+function detect_architecture {
+  local ARCHITECTURE=""
+  local OS_ARCH_DETECTED=$(uname -m)
+
+  case "$OS_ARCH_DETECTED" in
+    "x86_64"*)
+      ARCHITECTURE="linux_amd64"
+      ;;
+    "aarch64"*)
+      ARCHITECTURE="linux_arm64"
+      ;;
+		"arm"*)
+      ARCHITECTURE="linux_arm"
+			;;
+    *)
+      log "ERROR" "Unsupported architecture detected: '$OS_ARCH_DETECTED'. "
+		  exit_script 1
+			;;
+  esac
+
+  echo "$ARCHITECTURE"
+
 }
 
 # https://cloud.google.com/sdk/docs/install-sdk#linux
@@ -105,16 +132,64 @@ function directory_create {
   done
 }
 
-# install_consul_binary downloads the Consul binary and puts it in dedicated bin directory
+function checksum_verify {
+  local OS_ARCH="$1"
+
+  # https://www.hashicorp.com/en/trust/security
+  # checksum_verify downloads the $$PRODUCT binary and verifies its integrity
+  log "INFO" "Verifying the integrity of the $${PRODUCT} binary."
+  export GNUPGHOME=./.gnupg
+  log "INFO" "Importing HashiCorp GPG key."
+  sudo curl -s https://www.hashicorp.com/.well-known/pgp-key.txt | gpg --import
+
+	log "INFO" "Downloading $${PRODUCT} binary"
+  sudo curl -Os https://releases.hashicorp.com/"$${PRODUCT}"/"$${VERSION}"/"$${PRODUCT}"_"$${VERSION}"_"$${OS_ARCH}".zip
+	log "INFO" "Downloading Vault Enterprise binary checksum files"
+  sudo curl -Os https://releases.hashicorp.com/"$${PRODUCT}"/"$${VERSION}"/"$${PRODUCT}"_"$${VERSION}"_SHA256SUMS
+	log "INFO" "Downloading Vault Enterprise binary checksum signature file"
+  sudo curl -Os https://releases.hashicorp.com/"$${PRODUCT}"/"$${VERSION}"/"$${PRODUCT}"_"$${VERSION}"_SHA256SUMS.sig
+  log "INFO" "Verifying the signature file is untampered."
+  gpg --verify "$${PRODUCT}"_"$${VERSION}"_SHA256SUMS.sig "$${PRODUCT}"_"$${VERSION}"_SHA256SUMS
+	if [[ $? -ne 0 ]]; then
+		log "ERROR" "Gpg verification failed for SHA256SUMS."
+		exit_script 1
+	fi
+  if [ -x "$(command -v sha256sum)" ]; then
+		log "INFO" "Using sha256sum to verify the checksum of the $${PRODUCT} binary."
+		sha256sum -c "$${PRODUCT}"_"$${VERSION}"_SHA256SUMS --ignore-missing
+	else
+		log "INFO" "Using shasum to verify the checksum of the $${PRODUCT} binary."
+		shasum -a 256 -c "$${PRODUCT}"_"$${VERSION}"_SHA256SUMS --ignore-missing
+	fi
+	if [[ $? -ne 0 ]]; then
+		log "ERROR" "Checksum verification failed for the $${PRODUCT} binary."
+		exit_script 1
+	fi
+
+	log "INFO" "Checksum verification passed for the $${PRODUCT} binary."
+
+	log "INFO" "Removing the downloaded files to clean up"
+	sudo rm -f "$${PRODUCT}"_"$${VERSION}"_SHA256SUMS "$${PRODUCT}"_"$${VERSION}"_SHA256SUMS.sig
+
+}
+
+# install_consul_binary downloads the consul binary and puts it in dedicated bin directory
 function install_consul_binary {
-  log "INFO" "Downloading Consul Enterprise binary"
-  curl -so $CONSUL_DIR_BIN/consul.zip $CONSUL_INSTALL_URL
+  local OS_ARCH="$1"
 
-  log "INFO" "Unzipping Consul Enterprise binary to $CONSUL_DIR_BIN"
-  unzip $CONSUL_DIR_BIN/consul.zip consul -d $CONSUL_DIR_BIN
-  # unzip $CONSUL_DIR_BIN/consul.zip -x consul -d $CONSUL_DIR_LICENSE
+	log "INFO" "Deploying $${PRODUCT} binary to $CONSUL_DIR_BIN unzip and set permissions"
+	sudo unzip "$${PRODUCT}"_"$${CONSUL_VERSION}"_"$${OS_ARCH}".zip  consul -d $CONSUL_DIR_BIN
+	sudo unzip "$${PRODUCT}"_"$${CONSUL_VERSION}"_"$${OS_ARCH}".zip -x consul -d $CONSUL_DIR_LICENSE
+	sudo rm -f "$${PRODUCT}"_"$${CONSUL_VERSION}"_"$${OS_ARCH}".zip
 
-  rm $CONSUL_DIR_BIN/consul.zip
+	# Set the permissions for the $${PRODUCT} binary
+	sudo chmod 0755 $CONSUL_DIR_BIN/consul
+	sudo chown $CONSUL_USER:$CONSUL_GROUP $CONSUL_DIR_BIN/consul
+
+	# Create a symlink to the $${PRODUCT} binary in /usr/local/bin
+	sudo ln -sf $CONSUL_DIR_BIN/consul /usr/local/bin/consul
+
+	log "INFO" "$${PRODUCT} binary installed successfully at $CONSUL_DIR_BIN/consul"
 }
 
 function fetch_tls_certificates {
@@ -411,7 +486,7 @@ EOF
 }
 %{ endif ~}
 
-exit_script() {
+function exit_script {
   if [[ "$1" == 0 ]]; then
     log "INFO" "Consul custom_data script finished successfully!"
   else
@@ -423,8 +498,12 @@ exit_script() {
 
 main() {
   log "INFO" "Beginning custom_data script."
+
   OS_DISTRO=$(determine_os_distro)
   log "INFO" "Detected OS distro is '$OS_DISTRO'."
+
+  OS_ARCH=$(detect_architecture)
+	log "INFO" "Detected system architecture is '$OS_ARCH'."
 
   log "INFO" "Scraping VM metadata required for Consul configuration"
   scrape_vm_info
@@ -441,8 +520,10 @@ main() {
   log "INFO" "Creating directories for Consul config and data"
   directory_create
 
-  log "INFO" "Installing Consul"
-  install_consul_binary
+	checksum_verify $OS_ARCH
+	log "INFO" "Checksum verification completed for Consul binary."
+
+  install_consul_binary $OS_ARCH
 
   log "INFO" "Retrieving Consul license file from Secret Manager"
   fetch_consul_license
