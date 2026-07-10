@@ -357,3 +357,18 @@ variable "snapshot_agent" {
     error_message = "snapshot_agent.grant_iam_roles must not be true if snapshot agent is disabled"
   }
 }
+
+#-----------------------------------------------------------------------------------
+# DNS
+#-----------------------------------------------------------------------------------
+variable "create_cloud_dns_record" {
+  type        = bool
+  description = "Boolean to create Google Cloud DNS record for `consul_fqdn` resolving to load balancer IP. `cloud_dns_managed_zone` is required when `true`."
+  default     = false
+}
+
+variable "cloud_dns_managed_zone" {
+  type        = string
+  description = "Zone name to create Consul Cloud DNS record in if `create_cloud_dns_record` is set to `true`."
+  default     = null
+}
