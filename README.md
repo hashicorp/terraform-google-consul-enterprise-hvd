@@ -55,20 +55,20 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.33 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_google"></a> [google](#provider\_google) | ~> 5.33 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [google_compute_firewall.allow_consul_health_checks](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
 | [google_compute_firewall.allow_dns_tcp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
 | [google_compute_firewall.allow_dns_udp](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
@@ -85,6 +85,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | [google_compute_region_backend_service.consul_bs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_backend_service) | resource |
 | [google_compute_region_health_check.consul_hc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_health_check) | resource |
 | [google_compute_region_instance_group_manager.consul](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_instance_group_manager) | resource |
+| [google_dns_record_set.consul](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
 | [google_project_iam_member.consul_iam](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_secret_manager_secret.agent_token](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
 | [google_secret_manager_secret.management_token](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
@@ -96,13 +97,14 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | [google_compute_network.network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network) | data source |
 | [google_compute_subnetwork.subnetwork](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork) | data source |
 | [google_compute_zones.available](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_zones) | data source |
+| [google_dns_managed_zone.consul](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/dns_managed_zone) | data source |
 | [google_netblock_ip_ranges.legacy](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/netblock_ip_ranges) | data source |
 | [google_netblock_ip_ranges.new](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/netblock_ip_ranges) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_consul_gossip_key_sm_secret_name"></a> [consul\_gossip\_key\_sm\_secret\_name](#input\_consul\_gossip\_key\_sm\_secret\_name) | Name of Secret Manager secret containing Consul gossip encryption key. | `string` | n/a | yes |
 | <a name="input_consul_license_sm_secret_name"></a> [consul\_license\_sm\_secret\_name](#input\_consul\_license\_sm\_secret\_name) | Name of Secret Manager secret containing Consul license. | `string` | n/a | yes |
 | <a name="input_consul_tls_ca_cert_sm_secret_name"></a> [consul\_tls\_ca\_cert\_sm\_secret\_name](#input\_consul\_tls\_ca\_cert\_sm\_secret\_name) | Name of Secret Manager containing Consul TLS CA certificate. | `string` | n/a | yes |
@@ -118,6 +120,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_cidr_ingress_grpctls_allow"></a> [cidr\_ingress\_grpctls\_allow](#input\_cidr\_ingress\_grpctls\_allow) | CIDR ranges to allow gRPC-TLS (peering, dataplane) traffic inbound to Consul instance(s). Automatically includes the local subnet. | `list(string)` | `[]` | no |
 | <a name="input_cidr_ingress_https_allow"></a> [cidr\_ingress\_https\_allow](#input\_cidr\_ingress\_https\_allow) | CIDR ranges to allow HTTPS traffic inbound to Consul instance(s). | `list(string)` | <pre>[<br/>  "0.0.0.0/0"<br/>]</pre> | no |
 | <a name="input_cidr_ingress_ssh_allow"></a> [cidr\_ingress\_ssh\_allow](#input\_cidr\_ingress\_ssh\_allow) | CIDR ranges to allow SSH traffic inbound to Consul instance(s). | `list(string)` | <pre>[<br/>  "10.0.0.0/16"<br/>]</pre> | no |
+| <a name="input_cloud_dns_managed_zone"></a> [cloud\_dns\_managed\_zone](#input\_cloud\_dns\_managed\_zone) | Zone name to create Consul Cloud DNS record in if `create_cloud_dns_record` is set to `true`. | `string` | `null` | no |
 | <a name="input_common_labels"></a> [common\_labels](#input\_common\_labels) | (optional) Common labels to apply to GCP resources. | `map(string)` | `{}` | no |
 | <a name="input_compute_image_family"></a> [compute\_image\_family](#input\_compute\_image\_family) | (optional) The family name of the image, https://cloud.google.com/compute/docs/images/os-details,defaults to `Ubuntu` | `string` | `"ubuntu-2204-lts"` | no |
 | <a name="input_compute_image_project"></a> [compute\_image\_project](#input\_compute\_image\_project) | (optional) The project name of the image, https://cloud.google.com/compute/docs/images/os-details, defaults to `Ubuntu` | `string` | `"ubuntu-os-cloud"` | no |
@@ -133,6 +136,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 | <a name="input_consul_nodes"></a> [consul\_nodes](#input\_consul\_nodes) | (optional) The number of nodes to create in the pool | `number` | `6` | no |
 | <a name="input_consul_snapshot_dir_config"></a> [consul\_snapshot\_dir\_config](#input\_consul\_snapshot\_dir\_config) | Path to install Consul snapshot agent configuration | `string` | `"/etc/consul-snapshot.d"` | no |
 | <a name="input_consul_user_name"></a> [consul\_user\_name](#input\_consul\_user\_name) | Name of system user to own Consul files and processes | `string` | `"consul"` | no |
+| <a name="input_create_cloud_dns_record"></a> [create\_cloud\_dns\_record](#input\_create\_cloud\_dns\_record) | Boolean to create Google Cloud DNS record for `consul_fqdn` resolving to load balancer IP. `cloud_dns_managed_zone` is required when `true`. | `bool` | `false` | no |
 | <a name="input_disk_size"></a> [disk\_size](#input\_disk\_size) | (optional) The disk size (GB) to use to create the disk | `number` | `100` | no |
 | <a name="input_disk_type"></a> [disk\_type](#input\_disk\_type) | (optional) The disk type to use to create the disk | `string` | `"pd-ssd"` | no |
 | <a name="input_enable_auto_healing"></a> [enable\_auto\_healing](#input\_enable\_auto\_healing) | (optional) Enable auto-healing on the Instance Group | `bool` | `false` | no |
@@ -156,7 +160,7 @@ Please note that there is no official Service Level Agreement (SLA) for support 
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_consul_service_account"></a> [consul\_service\_account](#output\_consul\_service\_account) | Member-format ID of the Consul server service account. |
 | <a name="output_loadbalancer_ip"></a> [loadbalancer\_ip](#output\_loadbalancer\_ip) | The external ip address of the forwarding rule. |
 <!-- END_TF_DOCS -->
