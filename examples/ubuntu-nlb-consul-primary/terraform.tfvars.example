@@ -6,10 +6,16 @@ region                            = "us-central1"
 tags                              = ["consul"]
 application_prefix                = "consul"
 consul_license_sm_secret_name     = "<consul-license>"
-consul_tls_cert_sm_secret_name    = "<consul-tls-cert>"
-consul_tls_privkey_sm_secret_name = "<consul-tls-privkey>"
-consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert>"
+consul_tls_cert_sm_secret_name    = "<consul-tls-cert-base64>"
+consul_tls_privkey_sm_secret_name = "<consul-tls-privkey-base64>"
+consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert-base64>"
 consul_gossip_key_sm_secret_name  = "<consul-gossip-key>"
+
+#------------------------------------------------------------------------------
+# Networking
+#------------------------------------------------------------------------------
+network    = "<vpc-network-name>"
+subnetwork = "<vpc-subnetwork-name>"
 
 #------------------------------------------------------------------------------
 # Consul Configuration
@@ -36,6 +42,7 @@ common_labels = {
 enable_auto_healing        = false
 initial_auto_healing_delay = 1200
 enable_iap                 = true
+assign_public_ip           = false
 
 #------------------------------------------------------------------------------
 # IAM
@@ -43,12 +50,6 @@ enable_iap                 = true
 google_service_account_iam_roles = [
   "roles/compute.viewer"
 ]
-
-#-----------------------------------------------------------------------------------
-# DNS
-#-----------------------------------------------------------------------------------
-create_cloud_dns_record = false
-cloud_dns_managed_zone = ""
 
 #------------------------------------------------------------------------------
 # Load Balancer
@@ -62,8 +63,11 @@ health_timeout        = 15
 #------------------------------------------------------------------------------
 snapshot_agent = {
   enabled             = true
-  storage_bucket_name = "my-consul-snapshots-bucket"
+  storage_bucket_name = "<my-consul-snapshots-bucket>"
   grant_iam_roles     = true
   interval            = "30m"
   retention           = 336
 }
+
+create_cloud_dns_record = false
+cloud_dns_managed_zone  = "<my-cloud-dns-managed-zone>" # Only required when create_cloud_dns_record is true
