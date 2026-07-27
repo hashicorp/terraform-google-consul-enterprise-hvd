@@ -12,8 +12,10 @@ module "default" {
   consul_license_sm_secret_name     = var.consul_license_sm_secret_name
   consul_gossip_key_sm_secret_name  = var.consul_gossip_key_sm_secret_name
 
-  network    = var.network
-  subnetwork = var.subnetwork
+  network                 = var.network
+  subnetwork              = var.subnetwork
+  create_cloud_dns_record = var.create_cloud_dns_record
+  cloud_dns_managed_zone  = var.cloud_dns_managed_zone
 
   snapshot_agent = var.snapshot_agent
 }
