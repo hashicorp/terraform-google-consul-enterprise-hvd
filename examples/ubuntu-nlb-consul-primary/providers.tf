@@ -11,8 +11,7 @@ terraform {
 }
 
 provider "google" {
-  # Configuration options
-  project = "1234567890"
+  project = var.project_id
   region  = var.region
 }
 

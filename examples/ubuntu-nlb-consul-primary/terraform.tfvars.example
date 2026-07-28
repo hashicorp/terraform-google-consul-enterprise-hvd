@@ -1,69 +1,73 @@
 #------------------------------------------------------------------------------
 # Required and common variables
 #------------------------------------------------------------------------------
-project_id                        = "my-project-id"
-region                            = "us-central1"
-tags                              = ["consul"]
-application_prefix                = "consul"
+project_id                        = "<my-project-id>"
+region                            = "<us-central1>"
+tags                              = ["<consul>"]
+application_prefix                = "<consul>"
 consul_license_sm_secret_name     = "<consul-license>"
-consul_tls_cert_sm_secret_name    = "<consul-tls-cert>"
-consul_tls_privkey_sm_secret_name = "<consul-tls-privkey>"
-consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert>"
+consul_tls_cert_sm_secret_name    = "<consul-tls-cert-base64>"
+consul_tls_privkey_sm_secret_name = "<consul-tls-privkey-base64>"
+consul_tls_ca_cert_sm_secret_name = "<consul-tls-ca-cert-base64>"
 consul_gossip_key_sm_secret_name  = "<consul-gossip-key>"
+
+#------------------------------------------------------------------------------
+# Networking
+#------------------------------------------------------------------------------
+network    = "<vpc-network-name>"
+subnetwork = "<vpc-subnetwork-name>"
 
 #------------------------------------------------------------------------------
 # Consul Configuration
 #------------------------------------------------------------------------------
-consul_fqdn            = "consul.example.com"
-consul_install_version = "1.19.2+ent"
-consul_datacenter      = "dc1"
-auto_join_tag          = ["consul-auto-join"]
+consul_fqdn            = "<consul.example.com>"
+consul_install_version = "<1.19.2+ent>"
+consul_datacenter      = "<dc1>"
+auto_join_tag          = ["<consul>"] # Used for Consul's retry_join peer discovery; value must match a GCE network tag present on the VMs (i.e. must be in `tags`)
 
 #------------------------------------------------------------------------------
 # Compute
 #------------------------------------------------------------------------------
-consul_nodes          = 6
-compute_image_family  = "ubuntu-2204-lts"
-compute_image_project = "ubuntu-os-cloud"
+consul_nodes          = <6>
+compute_image_family  = "<ubuntu-2204-lts>"
+compute_image_project = "<ubuntu-os-cloud>"
 packer_image          = null # Set if using custom image
-disk_type             = "pd-ssd"
-disk_size             = 100
-machine_type          = "e2-standard-2"
+disk_type             = "<pd-ssd>"
+disk_size             = <100>
+machine_type          = "<e2-standard-2>"
 common_labels = {
-  environment = "prod"
-  team        = "platform"
+  environment = "<prod>"
+  team        = "<platform>"
 }
-enable_auto_healing        = false
-initial_auto_healing_delay = 1200
-enable_iap                 = true
+enable_auto_healing        = <false>
+initial_auto_healing_delay = <1200>
+enable_iap                 = <true>
+assign_public_ip           = <false>
 
 #------------------------------------------------------------------------------
 # IAM
 #------------------------------------------------------------------------------
 google_service_account_iam_roles = [
-  "roles/compute.viewer"
+  "<roles/compute.viewer>"
 ]
-
-#-----------------------------------------------------------------------------------
-# DNS
-#-----------------------------------------------------------------------------------
-create_cloud_dns_record = false
-cloud_dns_managed_zone = ""
 
 #------------------------------------------------------------------------------
 # Load Balancer
 #------------------------------------------------------------------------------
-load_balancing_scheme = "INTERNAL"
-health_check_interval = 30
-health_timeout        = 15
+load_balancing_scheme = "<INTERNAL>"
+health_check_interval = <30>
+health_timeout        = <15>
 
 #------------------------------------------------------------------------------
 # Snapshot Storage
 #------------------------------------------------------------------------------
 snapshot_agent = {
-  enabled             = true
-  storage_bucket_name = "my-consul-snapshots-bucket"
-  grant_iam_roles     = true
-  interval            = "30m"
-  retention           = 336
+  enabled             = <true>
+  storage_bucket_name = "<my-consul-snapshots-bucket>"
+  grant_iam_roles     = <true>
+  interval            = "<30m>"
+  retention           = <336>
 }
+
+create_cloud_dns_record = <false>
+cloud_dns_managed_zone  = "<my-cloud-dns-managed-zone>" # Only required when create_cloud_dns_record is true
